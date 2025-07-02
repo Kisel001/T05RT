@@ -98,6 +98,17 @@ namespace pirt
        */
       VOID OnKeydown( WPARAM Key, LPARAM Coordinates ) override;
 
+      /* WM_CLSOE window message handle function.
+       * ARGUMENTS: None.
+       * RETURNS: None.
+       */
+      VOID OnClose( VOID ) override
+      {
+        Scene.IsToBeStop = TRUE;
+        while (Scene.CountOfThreads > 0)
+          std::cout << Scene.CountOfThreads << std::endl;
+      } /* End of 'OnClose' function */
+
 
       /* Other message function.
        * ARGUMENTS:

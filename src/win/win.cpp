@@ -212,6 +212,9 @@ namespace pirt
           Win->OnDestroy();
           PostQuitMessage(30);
           return 0;
+        case WM_CLOSE:
+          Win->OnClose();
+          break;
         default:
           return Win->OnMessage(Msg, wParam, lParam);
         }

@@ -356,6 +356,14 @@ namespace pirt
   {
   } /* End of 'win::OnKeydown' function */
 
+  /* WM_CLOSE window message handle function.
+   * ARGUMENTS: None.
+   * RETURNS: None.
+   */
+  VOID win::OnClose( VOID )
+  {
+  } /* End of 'win::OnClose' function */
+
 } /* end of 'pirt' namespace */
 
 /* END OF 'win_msg.cpp' FILE */

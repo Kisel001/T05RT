@@ -302,7 +302,15 @@ namespace pirt
      * RETURNS: None.
      */
     virtual VOID OnEnterSizeMove( VOID );
-    
+
+  //protected:
+    /* WM_CLOSE window message handle function.
+     * ARGUMENTS: None.
+     * RETURNS: None.
+     */
+    virtual VOID OnClose( VOID );
+   
+  private:
     /* Window message universal handle function.
      * Should be returned 'DefWindowProc' call result.
      * ARGUMENTS:

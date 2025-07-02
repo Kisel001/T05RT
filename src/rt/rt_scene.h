@@ -36,6 +36,7 @@ namespace pirt
       std::atomic_bool IsRenderActive = FALSE;  // Is render active flag
       std::atomic_bool IsToBeStop = FALSE;      // Is to be stop flag
       std::atomic_bool IsReadyToFinish = TRUE;  // Is ready to finish flag
+      std::atomic_int CountOfThreads = 0;       // Count of working threads
       // Store rendering line
       std::atomic_int StartRow = 0;             // Store rendering line counting
 
@@ -123,33 +124,29 @@ namespace pirt
       VOID Render( const camera &Cam, frame &Frm, BOOL IsDebug = FALSE )
       {
         INT n = std::thread::hardware_concurrency();
-        if (IsDebug) // For debug mode, render with one thread (for render checking)
+        
+        // For debug mode, render with one thread (for render checking)
+        if (IsDebug)
           n = 1;
 
         std::vector<std::thread> Ths;
         Ths.resize(n);
 
         StartRow = 0;
+        CountOfThreads = n;
         for (INT i = 0; i < n; i++)
         {
           Ths[i] = std::thread(
             [&]( VOID )
             {
               INT y = 0;
-              while (y < Frm.H)
+              while (y < Frm.H && !IsToBeStop)
               {
                 y = StartRow++;
                 for (INT x = 0; x < Frm.W; x++)
                 {
-                  //ray r = Cam.FrameRay(x + 0.5, y + 0.5);
-                  //vec3 c = Trace(r, Air, 0.1);
                   const INT l = 2;
                   const DBL s = 1.0 / l;
-
-                  //if (y < Frm.H / 2)// || x < Frm.W / 2)
-                  //  continue;
-                  //if (y == Frm.H / 2 && x == Frm.W / 2)
-                  //  __debugbreak();
 
                   vec3 c;
                   
@@ -161,10 +158,16 @@ namespace pirt
                     }
                   
                   c /= l * l;
+
+                  if (y > Frm.H / 2 && c.X + c.Y + c.Z < 0.1)
+                  {
+                    //__debugbreak();
+                  }
                   
                   Frm.PutPixel(x, y, frame::ToRGB(c.X, c.Y, c.Z));
                 }
               }
+              CountOfThreads--;
             });
         }
         for (INT i = 0; i < n; i++)
@@ -214,6 +217,7 @@ namespace pirt
             ray R1 {R.Org, R.Dir}; // InvMatr.TransformPoint(R.Org), InvMatr.TransformVector(R.Dir)
 
             in.P = R1(in.T);
+            //in.N = InvMatr.Transpose().TransformVector(in.N);
             //in.Shp->GetNormal(&in);
             in.N.Normalize();
 

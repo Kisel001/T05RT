@@ -28,7 +28,7 @@ namespace pirt
      */
     rt_win::rt_win( HINSTANCE hInstance ) : win(hInstance), Scene(), Camera()
     {
-      Camera.SetLocAtUp(vec3(3), vec3(0, 0, 0));
+      Camera.SetLocAtUp(vec3(5), vec3(0, 0, 0));
 
       srand(time(nullptr));
 
@@ -129,12 +129,17 @@ namespace pirt
       // Scene << new plane(vec3(0, 1, 0), vec3(0, -1, 0), "bin/images/CGSG.g24");
       // Scene << new csg::bound(new objmodel("cow.obj"), new box(vec3(14, 14, 4), vec3(-9, -1, -4), "Gold"));
          
-      shape *S1 = new g3dm("x6.g3dm");
+      //Scene << new bicubic("bin/bicubic/teacup.txt");
+
+      shape *S1;
+      S1 = new g3dm("x6.g3dm");
+      //S1->SetMatr(matr::Translate(vec3(0, 1.5, 0)));
       //S1->Surf = surface("Gold");
-      S1->SetMatr(matr::RotateX(-90));
+      S1->SetMatr(matr::RotateX(-90) * matr::Translate(vec3(3, 0, 0)));// * matr::Translate(vec3(0, 2, 0)));
       Scene << S1;
 
       S1 = new box(vec3(-1, 0, 0), vec3(-2, 1, 1), "Gold");
+      S1->SetMatr(matr::Rotate(30, vec3(5, 2, 0)));
       Scene << S1;
 
       // Scene << new box(vec3(0), vec3(1), "Emerald");
@@ -252,7 +257,14 @@ namespace pirt
       {
       case VK_ESCAPE:
         if (MessageBox(hWnd, "Do you want to leave from program?", "CGSG", MB_YESNO | MB_ICONQUESTION) == IDYES)
+        {
+          //Scene.IsToBeStop = TRUE;
+          //
+          //while (Scene.CountOfThreads > 0)
+          //  std::cout << Scene.CountOfThreads;
+
           SendMessage(hWnd, WM_CLOSE, 0, 0);
+        }
       }
     } /* End of 'OnKeydown' function */
   } /* end of 'rt' namespace */

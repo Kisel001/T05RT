@@ -193,15 +193,15 @@ namespace pirt
       static BOOL PolIsInside( const vec3 &P1, const vec3 &P2, const vec3 &P3, const vec3 &MinBB, const vec3 &MaxBB )
       {
         return
-          (P1.X - MinBB.X > Treashold && P1.X - MaxBB.X < Treashold &&
-           P2.X - MinBB.X > Treashold && P2.X - MaxBB.X < Treashold &&
-           P3.X - MinBB.X > Treashold && P3.X - MaxBB.X < Treashold &&
-           P1.Y - MinBB.Y > Treashold && P1.Y - MaxBB.Y < Treashold &&
-           P2.Y - MinBB.Y > Treashold && P2.Y - MaxBB.Y < Treashold &&
-           P3.Y - MinBB.Y > Treashold && P3.Y - MaxBB.Y < Treashold &&
-           P1.Z - MinBB.Z > Treashold && P1.Z - MaxBB.Z < Treashold &&
-           P2.Z - MinBB.Z > Treashold && P2.Z - MaxBB.Z < Treashold &&
-           P3.Z - MinBB.Z > Treashold && P3.Z - MaxBB.Z < Treashold ) ?
+          (P1.X - MinBB.X >= Treashold && P1.X - MaxBB.X <= -Treashold &&
+           P2.X - MinBB.X >= Treashold && P2.X - MaxBB.X <= -Treashold &&
+           P3.X - MinBB.X >= Treashold && P3.X - MaxBB.X <= -Treashold &&
+           P1.Y - MinBB.Y >= Treashold && P1.Y - MaxBB.Y <= -Treashold &&
+           P2.Y - MinBB.Y >= Treashold && P2.Y - MaxBB.Y <= -Treashold &&
+           P3.Y - MinBB.Y >= Treashold && P3.Y - MaxBB.Y <= -Treashold &&
+           P1.Z - MinBB.Z >= Treashold && P1.Z - MaxBB.Z <= -Treashold &&
+           P2.Z - MinBB.Z >= Treashold && P2.Z - MaxBB.Z <= -Treashold &&
+           P3.Z - MinBB.Z >= Treashold && P3.Z - MaxBB.Z <= -Treashold ) ?
           TRUE : FALSE;
       } /* End of 'PolIsInside' function */
 
@@ -338,17 +338,18 @@ namespace pirt
       {
         pr_intr tmp;
         DBL BestT = -1;
+        BOOL flag = false;
 
         if (Less != nullptr && Less->BBIsIntersected(R, MinBB, MaxBB))
-          if (Less->Intersect(R, &tmp) && (BestT > tmp.T || BestT == -1))
-            BestT = tmp.T, *Intr = tmp;
+          if (Less->Intersect(R, &tmp) && (BestT > tmp.T || !flag))
+            BestT = tmp.T, *Intr = tmp, flag = true;
         if (More != nullptr && More->BBIsIntersected(R, MinBB, MaxBB))
-          if (More->Intersect(R, &tmp) && (BestT > tmp.T || BestT == -1))
-            BestT = tmp.T, *Intr = tmp;
+          if (More->Intersect(R, &tmp) && (BestT > tmp.T || !flag))
+            BestT = tmp.T, *Intr = tmp, flag = true;
 
         for (auto &i : Triangles)
-          if (i.IsIntersect(R, &tmp) && (BestT > tmp.T || BestT == -1))
-            BestT = tmp.T, *Intr = tmp;
+          if (i.IsIntersect(R, &tmp) && (BestT > tmp.T || !flag))
+            BestT = tmp.T, *Intr = tmp, flag = true;
         
         return BestT == -1 ? FALSE : TRUE;
       } /* End of 'Intersect' function */
@@ -793,6 +794,9 @@ namespace pirt
         if (NumOfMaterials > 0)
           for (auto &i : Prims)
             i.UpdateSurf();
+        //else
+        //  for (auto &i : Prims)
+        //    i.
       } /* End of 'g3dm' function */
 
       /* Default destructor */

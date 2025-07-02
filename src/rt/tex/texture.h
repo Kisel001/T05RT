@@ -36,7 +36,7 @@ namespace pirt
       INT Num;    // Texture number in stock
 
       /* Default constructor */
-      texture() : W(0), H(0), Buf(nullptr), Num(-1)
+      texture( VOID ) noexcept : W(0), H(0), Buf(nullptr), Num(-1)
       {
       } /* End of 'texture' function */
 
@@ -45,7 +45,7 @@ namespace pirt
        *   - other texture:
        *       texture &&Other;
        */
-      texture( texture &&Other ) : W(Other.W), H(Other.H), Num(Other.Num)
+      texture( texture &&Other ) noexcept : W(Other.W), H(Other.H), Num(Other.Num)
       {
         std::swap(Other.Buf, Buf);
         Other.Buf = nullptr;
@@ -171,7 +171,7 @@ namespace pirt
       std::map<INT, texture> Stock; // Texture stock
 
       /* Default constructor */
-      texture_manager() : TexCount(0)
+      texture_manager( VOID ) noexcept : TexCount(0)
       {
       } /* End of 'texture_manager' function */
 

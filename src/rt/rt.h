@@ -33,6 +33,7 @@
 /* Hard shapes header files */
 #include "shapes/objmodel.h"
 #include "shapes/g3dm.h"
+#include "shapes/bicubic.h"
 
 #endif // !__rt_h_
 
