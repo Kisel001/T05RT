@@ -135,7 +135,7 @@ namespace pirt
       S1 = new g3dm("x6.g3dm");
       //S1->SetMatr(matr::Translate(vec3(0, 1.5, 0)));
       //S1->Surf = surface("Gold");
-      S1->SetMatr(matr::RotateX(-90) * matr::Translate(vec3(3, 0, 0)));// * matr::Translate(vec3(0, 2, 0)));
+      S1->SetMatr(matr::RotateX(-90) * matr::Translate(vec3(0, 0, 0)));// * matr::Translate(vec3(0, 2, 0)));
       Scene << S1;
 
       S1 = new box(vec3(-1, 0, 0), vec3(-2, 1, 1), "Gold");
