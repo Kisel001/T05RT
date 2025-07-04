@@ -335,18 +335,7 @@ namespace mth
        */
       Type & operator[]( INT i )
       {
-        switch (i)
-        {
-        case 0:
-          return X;
-        case 1:
-          return Y;
-        case 2:
-          return Z;
-        default:
-          assert(0 && "Incorrect access to field");
-          return Z;
-        }
+        return *(&X + i);
       } /* End of 'operator[]' function */
 
       /* Get component function.
@@ -358,18 +347,7 @@ namespace mth
        */
       Type operator[]( INT i ) const
       {
-        switch (i)
-        {
-        case 0:
-          return X;
-        case 1:
-          return Y;
-        case 2:
-          return Z;
-        default:
-          assert(0 && "Incorrect access to field");
-          return Type();
-        }
+        return *(&X + i);
       } /* End of 'operator[]' function */
       
       /* Reflect function.
@@ -401,7 +379,7 @@ namespace mth
       } /* End of 'MaxComponent' function */
     }; /* End of 'vec3' class */
 
-#if 0
+#if 1
   /* 3D vector type :: double specifiaction */
   template<> 
     class __declspec(align(32)) vec3<DBL>
@@ -518,7 +496,7 @@ namespace mth
       vec3 operator*( const DBL N ) const
       {
         __m256d N1 = _mm256_broadcast_sd(&N);
-        return vec3(_mm256_div_pd(_mm256_load_pd(&this->X), N1));
+        return vec3(_mm256_mul_pd(_mm256_load_pd(&this->X), N1));
       } /* End of 'operator+' function */
 
       /* Vec div num function.
@@ -530,11 +508,8 @@ namespace mth
        */
       vec3 operator/( const DBL N ) const
       {
-        return vec3(V.X / N, V.Y / N, V.Z / N);
-#if 0
         __m256d N1 = _mm256_broadcast_sd(&N);
-        return vec3(_mm256_div_pd(_mm256_load_pd(&this->X), N1));//, _mm_div_pd(_mm_load_pd(&this->Z), N1));
-#endif
+        return vec3(_mm256_div_pd(_mm256_load_pd(&this->X), N1));
       } /* End of 'operator/' function */
 
       /* Vec length^2 function.
@@ -545,14 +520,6 @@ namespace mth
       DBL Len2() const
       {
         return X * X + Y * Y + Z * Z;
-#if 0
-        __m256d C = _mm256_load_pd(&this->X);
-        __m256d C1 = _mm256_mul_pd(C, C);
-        C1 = _mm256_hadd_pd(C1, C1);
-        C1 = _mm256_hadd_pd(C1, C1);
-#endif
-
-        //return _mm256_cvtsd_f64(C1);
       } /* End of 'Len2' function */
 
       /* Vec length function.
@@ -562,13 +529,7 @@ namespace mth
        */
       DBL operator!() const
       {
-        __m256d C = _mm256_load_pd(&this->X);
-        __m256d C1 = _mm256_mul_pd(C, C);
-        C1 = _mm256_hadd_pd(C1, C1);
-        C1 = _mm256_hadd_pd(C1, C1);
-        C1 = _mm256_sqrt_pd(C1);
-
-        return _mm256_cvtsd_f64(C1);
+         return sqrt(X * X + Y * Y + Z * Z);
       } /* End of 'operator!' function */
 
       /* Vec dot vec function.
@@ -580,11 +541,6 @@ namespace mth
        */
       DBL operator&( const vec3 &V ) const
       {
-        //__m256d C1 = _mm256_mul_pd(_mm256_load_pd(&this->X), _mm256_load_pd(&V.X));
-        //C1 = _mm256_hadd_pd(C1, C1);
-        //C1 = _mm256_hadd_pd(C1, C1);
-
-        //return _mm256_cvtsd_f64(C1);
         return X * V.X + Y * V.Y + Z * V.Z;
       } /* End of 'operator&' function */
 
@@ -679,8 +635,8 @@ namespace mth
        */
       vec3 & operator*=( const DBL N )
       {
-        __m128d N1 = _mm_load_sd(&N);
-        return *this = vec3(_mm_mul_pd(_mm_load_pd(&this->X), N1), _mm_mul_pd(_mm_load_pd(&this->Z), N1));
+        __m256d N1 = _mm256_broadcast_sd(&N);
+        return *this = vec3(_mm256_mul_pd(_mm256_load_pd(&this->X), N1));
       } /* End of 'operator*=' function */
 
       /* Vec div num eq function.
@@ -692,8 +648,8 @@ namespace mth
        */
       vec3 & operator/=( const DBL N )
       {
-        __m128d N1 = _mm_load_sd(&N);
-        return *this = vec3(_mm_mul_pd(_mm_load_pd(&this->X), N1), _mm_mul_pd(_mm_load_pd(&this->Z), N1));
+        __m256d N1 = _mm256_broadcast_sd(&N);
+        return *this = vec3(_mm256_div_pd(_mm256_load_pd(&this->X), N1));
       } /* End of 'operator/=' function */
 
       /* Normalize vector.
@@ -749,18 +705,7 @@ namespace mth
        */
       DBL & operator[]( INT i )
       {
-        switch (i)
-        {
-        case 0:
-          return X;
-        case 1:
-          return Y;
-        case 2:
-          return Z;
-        default:
-          assert(0 && "Incorrect access to field");
-          return Z;
-        }
+        return *(&X + i);
       } /* End of 'operator[]' function */
 
       /* Get component function.
@@ -772,19 +717,24 @@ namespace mth
        */
       DBL operator[]( INT i ) const
       {
-        switch (i)
-        {
-        case 0:
-          return X;
-        case 1:
-          return Y;
-        case 2:
-          return Z;
-        default:
-          assert(0 && "Incorrect access to field");
-          return DBL();
-        }
+        return *(&X + i);
       } /* End of 'operator[]' function */
+
+      /* Get max component function.
+       * ARGUMENTS: None.
+       * RETURNS:
+       *   (Type) max component.
+       */
+      DBL MaxComponent( VOID ) const
+      {
+        DBL MaxC = X;
+        if (MaxC < Y)
+          MaxC = Y;
+        if (MaxC < Z)
+          MaxC = Z;
+
+        return MaxC;
+      } /* End of 'MaxComponent' function */
 
     }; /* End of 'vec3<DBL>' class */
 #endif
