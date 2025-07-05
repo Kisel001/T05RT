@@ -260,18 +260,18 @@ namespace pirt
        */
       vec3 Shade( const vec3 &V, const envi &Media, intr *In, DBL Weight, INT RecLevel )
       {
+#if 1
         shade_info si {In->P, In->N, In->Shp, In->Shp->Surf, Media, {1, 0, 0}, {0, 1, 0}, In};
           /// modifiers (later)
           // face forward (si.N):
         // Faceforward normal
         DBL vn = V & si.N;
+        BOOL IsEnter = TRUE;
 
         if (vn > 0)
         {
           si.N = -si.N;
           vn = -vn;
-          //DBL vn = V & si.N;
-          BOOL IsEnter = TRUE;
           IsEnter = FALSE;
         }
 
@@ -361,7 +361,35 @@ namespace pirt
           // OR si.Surf.Kr.IsUsage && coef(si.Surf.Kr.K * Weight).IsUsage
           color += si.Surf.Kr.K * Trace(ray(si.P + R * Threshold, R), Media, w, RecLevel);
 
-        return color;
+        vec3 refract {0};
+#if 1
+        // Refraction
+        DBL eta = IsEnter ?
+           (In->Shp->Surf.RefractionCoef / 0.95) : (0.95 / In->Shp->Surf.RefractionCoef);
+
+        DBL sq = 1 - (1 - (V & si.N) * (V & si.N));
+
+        if (In->Shp->Surf.Kt.MaxComponent() > Treashold)
+        {
+          if (sq > 0)
+          {
+            vec3 T = (V - si.N * (V & si.N)) * eta - si.N * sqrt(sq);
+            T.Normalize();
+            refract = In->Shp->Surf.Kt.K * Trace(ray(si.P + T * Treashold * 10, T), Media, Weight, RecLevel);
+          }
+          else
+          {
+            vec3 T = (V - si.N * (V & si.N)) * eta - si.N;
+            T.Normalize();
+            refract = In->Shp->Surf.Kt.K * Trace(ray(si.P + T * Treashold * 10, T), Media, Weight, RecLevel);
+          }
+        }
+#endif
+
+
+        return color + refract;
+#endif
+
       } /* End of 'Shade function' */
 
       /* Intersection function.

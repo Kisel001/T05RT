@@ -32,7 +32,7 @@ namespace pirt
       std::map<INT, surface> Stock; // Surface stock
 
       /* Default constructor */
-      mtl_manager() : MtlCount(0)
+      mtl_manager( VOID ) : MtlCount(0)
       {
         for (auto &i : SurfaceLib)
           AddMaterial({i.SurfaceData.Ka, i.SurfaceData.Kd, i.SurfaceData.Ks, i.SurfaceData.Ph});

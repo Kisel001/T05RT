@@ -753,8 +753,9 @@ namespace pirt
           mtl.Kd = ConvertFVtoDV3(fmat->Kd);
           mtl.Ks = ConvertFVtoDV3(fmat->Ks);
           mtl.Ph = fmat->Ph;
-          mtl.Kt = fmat->Trans;
+          mtl.Kt = 1 - fmat->Trans;
           mtl.Kr = 0.2;
+          mtl.RefractionCoef = 1;
           for (t = 0; t < 8; t++)
             mtl.TexNum[t] = fmat->Tex[t] == -1 ? -1 : TexManager.TexCount + fmat->Tex[t];
           MtlManager.AddMaterial(mtl);

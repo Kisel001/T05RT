@@ -167,7 +167,7 @@ namespace pirt
        *   - phong coef:
        *       DBL ph;
        */
-      surface( vec3 ka, vec3 kd, vec3 ks, DBL ph ) : Ka(ka), Kd(kd), Ks(ks), Ph(ph), Kr(0.5), Kt(0)
+      surface( vec3 ka, vec3 kd, vec3 ks, DBL ph, DBL kt = 0, DBL rc = 1 ) : Ka(ka), Kd(kd), Ks(ks), Ph(ph), Kr(0.4), Kt(kt), RefractionCoef(rc)
       {
         for (INT i = 0; i < 8; ++i)
           TexNum[i] = -1;
@@ -178,7 +178,7 @@ namespace pirt
        *   - surface name:
        *       const CHAR *SurfName;
        */
-      surface( const CHAR *SurfName ) : Kr(0.1), Kt(0)
+      surface( const CHAR *SurfName, DBL kt = 0, DBL rc = 1 ) : Kr(0.1), Kt(kt), RefractionCoef(rc)
       {
         for (INT i = 0; i < SurfaceLibSize; ++i)
           if (std::strcmp(SurfName, SurfaceLib[i].SurfaceName) == 0)
@@ -196,9 +196,10 @@ namespace pirt
         surface({0.05375, 0.05, 0.06625}, {0.18275, 0.17, 0.22525}, {0.332741, 0.328634, 0.346435}, 38.4);
       } /* End of 'surface' function */
 
-      vec3 Ka, Kd, Ks;  // ambient, diffuse, specular
-      DBL Ph;           // Bui Tong Phong coefficient
-      coef Kr {}, Kt {};      // reflected, transmitted
+      vec3 Ka, Kd, Ks;           // ambient, diffuse, specular
+      DBL Ph;                    // Bui Tong Phong coefficient
+      coef Kr {}, Kt {};         // reflected, transmitted
+      DBL RefractionCoef = 0.95; // refraction
 
       INT TexNum[8];    // Number of textures
     }; /* End of 'surface' class */

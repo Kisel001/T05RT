@@ -41,7 +41,7 @@ namespace pirt
        *   - radius:
        *       DBL Radius;
        */
-      sphere( vec3 Cen, DBL Radius, const CHAR *MtlName = "Gold" ) : Center(Cen), R2(Radius * Radius), shape(surface(MtlName))
+      sphere( vec3 Cen, DBL Radius, const CHAR *MtlName = "Gold", DBL kt = 0, DBL rc = 1 ) : Center(Cen), R2(Radius * Radius), shape(surface(MtlName, kt, rc))
       {
         this->material = 2;
       } /* End of 'sphere' function */
