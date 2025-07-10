@@ -142,11 +142,12 @@ namespace pirt
       /* Bicubic constructor.
        * ARGUMENTS:
        *   - filename:
-       *       std::string Filename;
+       *       const std::string &Filename;
        */
-      bicubic( std::string Filename )
+      bicubic( const std::string &Filename )
       {
-        FILE *F = fopen(Filename.c_str(), "r");
+        std::string nfn = "bin/bicubic/" + Filename;
+        FILE *F = fopen(nfn.c_str(), "r");
         INT CountOfPlanes;
 
         if (F == nullptr)

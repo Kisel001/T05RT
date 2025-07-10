@@ -132,18 +132,22 @@ namespace pirt
       //Scene << new bicubic("bin/bicubic/teacup.txt");
 
       shape *S1;
+      //S1 = new bicubic("teacup.txt");
+      //S1->SetMatr(matr::Translate(vec3(0, -0.9, 0)));
+
 #if 1
       S1 = new g3dm("x6.g3dm");
       //S1->SetMatr(matr::Translate(vec3(0, 1.5, 0)));
       //S1->Surf = surface("Gold");
-      S1->SetMatr(matr::RotateX(-90) * matr::Translate(vec3(0, 0, 0)));// * matr::Translate(vec3(0, 2, 0)));
+      S1->SetMatr(matr::RotateX(-90));// * matr::Translate(vec3(0, 0, 0)));// * matr::Translate(vec3(0, 2, 0)));
       Scene << S1;
 #endif
 
       // Refraction not working :(
       //Scene << new sphere(vec3(1, 1, 1), 1, "Emerald", 0.5, 1.15);
 
-      S1 = new box(vec3(-1, 0, 0), vec3(-2, 1, 1), "Gold");
+      //S1 = new sphere(vec3(2.5, 0.5, -0.5), 1, "Emerald");
+      S1 = new box(vec3(-1, 0, 0), vec3(-2, 1, 1), "Emerald");
       S1->SetMatr(matr::Rotate(30, vec3(5, 2, 0)));
       Scene << S1;
 

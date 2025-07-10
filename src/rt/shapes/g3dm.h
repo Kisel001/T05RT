@@ -644,7 +644,7 @@ namespace pirt
       std::vector<prim> Prims; // Array with prims
 
       /* Constructor of g3dm */
-      g3dm( std::string filename )
+      g3dm( const std::string &filename )
       {
         FILE *F;
         INT flen;
@@ -655,9 +655,11 @@ namespace pirt
           NumOfMaterials,
           NumOfTextures;
         INT p, t, m;
+
+        std::string nfn = "bin/models/" + filename;
  
         /* Open file */
-        if ((F = fopen(filename.c_str(), "rb")) == NULL)
+        if ((F = fopen(nfn.c_str(), "rb")) == NULL)
           return;
  
         /* Obtain file length */

@@ -62,7 +62,7 @@
       <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;%(PreprocessorDefinitions);_CRT_SECURE_NO_WARNINGS</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp20</LanguageStandard>
-      <AdditionalIncludeDirectories>X:/TGRKIT/INCLUDE;.\src;</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>.\src;</AdditionalIncludeDirectories>
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>pirt.h</PrecompiledHeaderFile>
       <PrecompiledHeaderOutputFile>$(IntDir)pirt.pch</PrecompiledHeaderOutputFile>
@@ -84,7 +84,7 @@
       <PreprocessorDefinitions>NDEBUG;_WINDOWS;%(PreprocessorDefinitions);_CRT_SECURE_NO_WARNINGS</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp20</LanguageStandard>
-      <AdditionalIncludeDirectories>X:/TGRKIT/INCLUDE;.\src;</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>.\src;</AdditionalIncludeDirectories>
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>pirt.h</PrecompiledHeaderFile>
       <PrecompiledHeaderOutputFile>$(IntDir)pirt.pch</PrecompiledHeaderOutputFile>
