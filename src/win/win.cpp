@@ -37,29 +37,6 @@ namespace pirt
    */
   VOID win::WindowCreate( const CHAR *Name, HWND hPrnWnd )
   {
-    hWnd = 
-      CreateWindow(WND_CLASS_NAME,
-        Name,
-        WS_OVERLAPPEDWINDOW,
-        0, 0,
-        1000, 500,
-        hPrnWnd, NULL, 
-        hInstance, reinterpret_cast<VOID *>(this));
-
-    ShowWindow(hWnd, SW_SHOWNORMAL);
-    UpdateWindow(hWnd);
-  } /* End of 'win::WindowCreate' function */
-    
-  /* Create class function.
-   * ARGUMENTS:
-   *   - class name:
-   *       CHAR *Name;
-   *   - application descriptor:
-   *       HINSTANCE hInstance;
-   * RETURNS: None.
-   */
-  VOID win::CreateClass( const CHAR *Name, HINSTANCE hInstance )
-  {
     WNDCLASS wc {};
 
     wc.style = CS_VREDRAW | CS_HREDRAW;
@@ -77,7 +54,29 @@ namespace pirt
 
     if (!RegisterClass(&wc))
       MessageBox(NULL, "Don't create window's class", "ERROR", MB_OK);
-  } /* End of 'win::CreateClass' function */
+
+    hWnd = 
+      CreateWindow(WND_CLASS_NAME,
+        Name,
+        WS_OVERLAPPEDWINDOW,
+        0, 0,
+        1000, 500,
+        hPrnWnd, nullptr, 
+        hInstance, reinterpret_cast<VOID *>(this));
+
+    auto settings = winrt::Windows::UI::ViewManagement::UISettings();
+    auto clr = settings.GetColorValue(winrt::Windows::UI::ViewManagement::UIColorType::Foreground);
+    bool isdarkmode = static_cast<bool>((((5 * clr.G) + (2 * clr.R) + clr.B) > (8 * 128)));
+    
+    if (isdarkmode)
+    {
+      INT value = TRUE;
+      DwmSetWindowAttribute(hWnd, DWMWA_USE_IMMERSIVE_DARK_MODE, &value, sizeof(value));
+    }
+
+    ShowWindow(hWnd, SW_SHOWNORMAL);
+    UpdateWindow(hWnd);
+  } /* End of 'win::WindowCreate' function */
 
   /* Window function.
    * ARGUMENTS:

@@ -30,13 +30,11 @@
  */
 INT WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance, CHAR *CmdLine, INT ShowCmd )
 {
-  pirt::rt::rt_win::CreateClass(WND_CLASS_NAME, hInstance);
   pirt::rt::rt_win myw(hInstance);
-  myw.WindowCreate("CGSG");
+  myw.WindowCreate("T05RT");
 
-//#ifdef _DEBUG
-  // Enable debug console for VS DEBUG mode.
-
+#if 0
+  // Enable debug console
   AllocConsole();
   SetConsoleTitle("CGSG IP5 :: Ray Tracing :: Debug console");
   HWND hCnsWnd = GetConsoleWindow();
@@ -46,7 +44,7 @@ INT WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance, CHAR *CmdLine,
   std::freopen("CONOUT$", "w", stdout);
   std::system("@chcp 1251 > nul");
   SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 0x0C);
-//#endif // _DEBUG
+#endif
 
   myw.Run();
 

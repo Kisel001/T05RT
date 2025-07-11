@@ -39,10 +39,12 @@ namespace mth
     {
     public:
       Type M[4][4]; // Matr components
+#if 0
     private:
       mutable Type InvM[4][4];        // Inverse matr components.
       mutable BOOL IsInverse = FALSE; // Matr inverse status
-
+#endif
+    public:
       /* Default constructor */
       matr()
       {
@@ -87,16 +89,6 @@ namespace mth
         std::memcpy(M[1], V1, sizeof(vec4<Type>));
         std::memcpy(M[2], V2, sizeof(vec4<Type>));
         std::memcpy(M[3], V3, sizeof(vec4<Type>));
-      } /* End of 'matr' function */
-
-      /* Constructor by Type array.
-       * ARGUMENTS:
-       *   - array:
-       *       const Type A[4][4];
-       */
-      matr( const Type A[4][4] )
-      {
-        std::memcpy(M[0], A[0], sizeof(matr<Type>));
       } /* End of 'matr' function */
 
       /* Get identity matrix function.
@@ -567,16 +559,6 @@ namespace mth
         std::memcpy(M[1], &V1, sizeof(vec4<DBL>));
         std::memcpy(M[2], &V2, sizeof(vec4<DBL>));
         std::memcpy(M[3], &V3, sizeof(vec4<DBL>));
-      } /* End of 'matr' function */
-
-      /* Constructor by DBL array.
-       * ARGUMENTS:
-       *   - array:
-       *       const DBL A[4][4];
-       */
-      matr( const DBL A[4][4] )
-      {
-        std::memcpy(M[0], A[0], sizeof(matr<DBL>));
       } /* End of 'matr' function */
 
       /* Get identity matrix function.

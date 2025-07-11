@@ -59,16 +59,6 @@ namespace pirt
      */
     VOID WindowCreate( const CHAR *Name, HWND hPrnWnd = nullptr );
 
-    /* Create class function.
-     * ARGUMENTS:
-     *   - class name:
-     *       CHAR *Name;
-     *   - application descriptor:
-     *       HINSTANCE hInstance;
-     * RETURNS: None.
-     */
-    static VOID CreateClass( const CHAR *Name, HINSTANCE hInstance );
-
     /* Window destructor */
     virtual ~win( VOID );
 
@@ -85,10 +75,13 @@ namespace pirt
     VOID FlipFullScreen( VOID );
 
   private:
-    /* Message cracks */
-
-    VOID OnGetMinMaxInfo( MINMAXINFO *MinMax ); // ???
-
+    /* Windows get min max info message function.
+     * ARGUMENTS:
+     *   - minmaxinfo structure:
+     *       MINMAXINFO *MinMax;
+     * RETURNS: None.
+     */
+    VOID OnGetMinMaxInfo( MINMAXINFO *MinMax );
 
     /* WM_CREATE window message handle function.
      * ARGUMENTS:

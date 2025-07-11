@@ -20,15 +20,9 @@
 #include <cstring>
 #include <iostream>
 #include <cassert>
-#include <intrin.h>
+#include <immintrin.h>
 
-#ifndef WIN32
-#define WIN32
 #include <commondf.h>
-#undef WIN32
-#else  // !WIN32
-#include <commondf.h>
-#endif // !WIN32
 
 /* Short version of float types */
 typedef float FLT;

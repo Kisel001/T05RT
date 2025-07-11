@@ -174,7 +174,7 @@ namespace pirt
           DBL 
             v = COM_SIGN(Rk + h) * pow(abs(Rk + h), 1.0 / 3.0),
             u = COM_SIGN(Rk - h) * pow(abs(Rk - h), 1.0 / 3.0); 
-          vec2 s {(v + u) + 4.0 * c2, (v - u) * sqrt(3.0)};
+          vec2 s ((DBL)((v + u) + 4.0 * c2), (DBL)((v - u) * sqrt(3.0)));
           DBL 
             y = sqrt(0.5 * ((!s) + s.X)),
             x = 0.5 * s.Y / y,

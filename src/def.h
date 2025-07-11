@@ -16,6 +16,12 @@
 #ifndef __def_h_
 #define __def_h_
 
+/* Windows DWM and RT support */
+#include <dwmapi.h>
+#include <winrt/Windows.UI.ViewManagement.h>
+
+#include "mth/mth.h"
+
 /* Debug memory allocation support */
 #ifdef _DEBUG
 #  define _CRTDBG_MAP_ALLOC
@@ -52,7 +58,6 @@ static struct __Dummy
 #  pragma warning(disable: 6031 26451 26495 28251 6385 6386 26451 26819)
 #endif // _MSC_VER
 
-#include "mth/mth.h"
 #include <vector>
 #include <complex>
 #include <list>
@@ -66,149 +71,6 @@ typedef unsigned long long QWORD;
 /* Base project namespace */
 namespace pirt
 {
-#define QSNR_STKSIZ (8 * sizeof(VOID *) - 2)
-
-  /* Swap two elements function.
-   * ARGUMENTS:
-   *   - reference to elements:
-   *       Type *A, *B;
-   * RETURNS: None.
-   */
-  template<typename Type>
-    VOID Swap( Type *A, Type *B )
-    {
-      Type tmp = *A;
-      *A = *B;
-      *B = tmp;
-    } /* End of 'Swap' function */
-
-   template<typename Type>
-     VOID QuickSortStartup( Type *Arr, UINT_PTR Size )
-     {
-       if (Size >= 2)
-         QuickSortNoRec(Arr, Size);
-     }
-
-#if 0
-    /* Quick sorting (without recurse) function.
-     * ARGUMENTS:
-     *   - array:
-     *       Type *Arr;
-     *   - count of elements:
-     *       UINT_PTR Size;
-     * RETURNS: None.
-     */
-    template<typename Type>
-      void QuickSortSuper( Type *const base, size_t const num, int (__cdecl* const comp)( void const *A, void const *B ) )
-      {
-        // A stack for saving the sub-arrays yet to be processed:
-        Type *lostk[QSNR_STKSIZ];
-        Type *histk[QSNR_STKSIZ];
-        INT stkptr = 0;
-
-        if (num < 2)
-            return;
-
-        Type *lo = base;
-        Type *hi = base + (num - 1);
-
-recurse:
-        size_t const size = (hi - lo) / width + 1;
-
-        CHAR *mid = lo + (size / 2) * width;
-
-        if (comp(lo, mid) > 0)
-          Swap(lo, mid);
-
-        if (comp(lo, hi) > 0)
-          Swap(lo, hi);
-
-        if (comp(mid, hi) > 0)
-          Swap(mid, hi);
-
-        CHAR *loguy = lo;
-        CHAR *higuy = hi;
-
-        while (TRUE)
-        {
-          if (mid > loguy)
-          {
-            do
-            {
-              loguy += width;
-            } while (loguy < mid && comp(loguy, mid) <= 0);
-          }
-          if (mid <= loguy)
-          {
-            do
-            {
-              loguy += width;
-            } while (loguy <= hi && comp(loguy, mid) <= 0);
-          }
-          do
-          {
-            higuy -= width;
-          } while (higuy > mid && comp(higuy, mid) > 0);
-
-          if (higuy < loguy)
-            break;
-
-          swap(loguy, higuy, width);
-          if (mid == higuy)
-            mid = loguy;
-        }
-        higuy += width;
-        if (mid < higuy)
-        {
-          do
-          {
-            higuy -= width;
-          } while (higuy > mid && comp(higuy, mid) == 0);
-        }
-        if (mid >= higuy)
-        {
-          do
-          {
-            higuy -= width;
-          } while (higuy > lo && comp(higuy, mid) == 0);
-        }
-        if (higuy - lo >= hi - loguy)
-        {
-          if (lo < higuy)
-          {
-            lostk[stkptr] = lo;
-            histk[stkptr] = higuy;
-            ++stkptr;
-          }
-          if (loguy < hi)
-          {
-            lo = loguy;
-            goto recurse;
-          }
-        }
-        else
-        {
-          if (loguy < hi)
-          {
-            lostk[stkptr] = loguy;
-            histk[stkptr] = hi;
-            ++stkptr;
-          }
-          if (lo < higuy)
-          {
-            hi = higuy;
-            goto recurse;
-          }
-        }
-        if (--stkptr >= 0)
-        {
-          lo = lostk[stkptr];
-          hi = histk[stkptr];
-          goto recurse;
-        }
-      } /* End of 'QuickSortSuper' function */
-#endif
-
   /* Stock class */
   template<typename T>
     class stock : public std::vector<T>
