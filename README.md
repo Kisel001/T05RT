@@ -14,3 +14,5 @@ _Where cc, cl, cq is attenuation coefficients (for example, use {0.7, 0.1, 0.1]}
 
 To change camera, use:  
 `Camera.SetLocAtUp(Pos, At);`
+
+To render scene, press 'R'.

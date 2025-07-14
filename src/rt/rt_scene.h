@@ -128,6 +128,8 @@ namespace pirt
         // For debug mode, render with one thread (for render checking)
         if (IsDebug)
           n = 1;
+        else
+          n = max(1, n - 1);
 
         std::vector<std::thread> Ths;
         Ths.resize(n);

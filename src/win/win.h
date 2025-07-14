@@ -33,9 +33,10 @@ namespace pirt
     static LRESULT CALLBACK WinFunc( HWND hWnd, UINT Msg,
                                      WPARAM wParam, LPARAM lParam );
 
-    BOOL IsFullScreen;       // Is full screen flag
-    RECT FullScreenSaveRect; // Full screen rect
-    INT MouseWheel;          // Mouse wheel value
+    BOOL IsFullScreen;         // Is full screen flag
+    RECT FullScreenSaveRect;   // Full screen rect
+    INT MouseWheel;            // Mouse wheel value
+    clock_t LastTimerCall = 0; // Last timer call.
   public:
     BOOL IsActive;           // IsActive flag
     INT W, H;                // window size

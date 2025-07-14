@@ -238,7 +238,15 @@ namespace pirt
         DispatchMessage(&msg);
       }
       else
-        SendMessage(hWnd, WM_TIMER, 47, 0);
+      {
+        clock_t t = clock();
+
+        if (t - LastTimerCall > CLOCKS_PER_SEC / 30)
+        {
+          LastTimerCall = t;
+          SendMessage(hWnd, WM_TIMER, 47, 0);
+        }
+      }
     }
   } /* End of 'win::Run' function */
 
