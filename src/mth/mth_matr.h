@@ -731,36 +731,24 @@ namespace mth
         return C;
       } /* End of 'operator*' function */
 
-      /* Multiplicate two matrixes function.
-       * ARGUMENTS: 
-       *   - second matrix:
-       *       const matr &M1;
+    private:
+      /* Custom _mm_shuffle_ps for __m256d (4xf64) function
+       * ARGUMENTS:
+       *   - vectors:
+       *       __m256d A, B;
        * RETURNS:
-       *   (MATR) result matrix.
+       *   (__m256d) result vector.
        */
-      __declspec(noinline) static VOID matrmulmatr( matr *MRes, matr *M1, matr *M2 )
-      {
-        __m256d row1 = _mm256_load_pd(&M2->M[0][0]);
-        __m256d row2 = _mm256_load_pd(&M2->M[1][0]);
-        __m256d row3 = _mm256_load_pd(&M2->M[2][0]);
-        __m256d row4 = _mm256_load_pd(&M2->M[3][0]);
-
-        for (INT i = 0; i < 4; ++i)
+      template<int imm03, int imm47>
+        static __m256d _MM256_Shuffle_Pd_Custom( __m256d A, __m256d B )
         {
-          __m256d brod1 = _mm256_broadcast_sd(&M1->M[i][0]);
-          __m256d brod2 = _mm256_broadcast_sd(&M1->M[i][1]);
-          __m256d brod3 = _mm256_broadcast_sd(&M1->M[i][2]);
-          __m256d brod4 = _mm256_broadcast_sd(&M1->M[i][3]);
-          __m256d row   = _mm256_add_pd(_mm256_add_pd(_mm256_mul_pd(brod1, row1),
-                                                      _mm256_mul_pd(brod2, row2)),
-                                        _mm256_add_pd(_mm256_mul_pd(brod3, row3),
-                                                      _mm256_mul_pd(brod4, row4)));
+          __m256d a1 = _mm256_permute4x64_pd(A, imm03);
+          __m256d b1 = _mm256_permute4x64_pd(B, imm47);
+        
+          return _mm256_blend_pd(a1, b1, 0xC);
+        } /* End of '_MM256_Shuffle_Pd_Custom' */
 
-          _mm256_store_pd(&MRes->M[i][0], row);
-        }
-      } /* End of 'operator*' function */
-
-
+    public:
       /* Matrix transponce function.
        * ARGUMENTS: None
        * RETURNS:
@@ -768,10 +756,37 @@ namespace mth
        */
       matr Transpose() const
       {
+#if 1
+        matr M1;
+      
+        __m256d _Tmp3, _Tmp2, _Tmp1, _Tmp0;
+        __m256d row0 = _mm256_load_pd(&M[0][0]);
+        __m256d row1 = _mm256_load_pd(&M[1][0]);
+        __m256d row2 = _mm256_load_pd(&M[2][0]);
+        __m256d row3 = _mm256_load_pd(&M[3][0]);
+      
+        _Tmp0 = _MM256_Shuffle_Pd_Custom<0x4, 0x40>((row0), (row1));
+        _Tmp2 = _MM256_Shuffle_Pd_Custom<0x4, 0x40>((row0), (row1));
+        _Tmp1 = _MM256_Shuffle_Pd_Custom<0x4, 0x40>((row2), (row3));
+        _Tmp3 = _MM256_Shuffle_Pd_Custom<0x4, 0x40>((row2), (row3));
+      
+        row0 = _MM256_Shuffle_Pd_Custom<0x8, 0x80>(_Tmp0, _Tmp1);
+        row1 = _MM256_Shuffle_Pd_Custom<0xD, 0xD0>(_Tmp0, _Tmp1);
+        row2 = _MM256_Shuffle_Pd_Custom<0x8, 0x80>(_Tmp2, _Tmp3);
+        row3 = _MM256_Shuffle_Pd_Custom<0xD, 0xD0>(_Tmp2, _Tmp3);
+      
+        _mm256_store_pd(&M1[0][0], row0);
+        _mm256_store_pd(&M1[1][0], row1);
+        _mm256_store_pd(&M1[2][0], row2);
+        _mm256_store_pd(&M1[3][0], row3);
+      
+        return M1;
+#else
         return matr(M[0][0], M[1][0], M[2][0], M[3][0],
                     M[0][1], M[1][1], M[2][1], M[3][1],
                     M[0][2], M[1][2], M[2][2], M[3][2],
                     M[0][3], M[1][3], M[2][3], M[3][3]);
+#endif
       } /* End of 'Transponce' function */
 
       /* Matrix 3*3 determination function.

@@ -529,7 +529,7 @@ namespace mth
        */
       DBL operator!() const
       {
-         return sqrt(X * X + Y * Y + Z * Z);
+         return sqrt(Len2());
       } /* End of 'operator!' function */
 
       /* Vec dot vec function.

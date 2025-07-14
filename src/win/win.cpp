@@ -43,17 +43,17 @@ namespace pirt
     wc.cbClsExtra = 0;
     wc.cbWndExtra = 0;
     wc.hbrBackground = (HBRUSH)COLOR_WINDOW;
-    wc.hCursor = LoadCursor(NULL, IDC_ARROW);
-    wc.hIcon = LoadIcon(NULL, IDI_EXCLAMATION);
-    wc.lpszMenuName = NULL;
+    wc.hCursor = LoadCursor(nullptr, IDC_ARROW);
+    wc.hIcon = LoadIcon(nullptr, IDI_EXCLAMATION);
+    wc.lpszMenuName = nullptr;
     wc.hInstance = hInstance;
-    wc.lpfnWndProc = NULL;
+    wc.lpfnWndProc = nullptr;
     wc.lpszClassName = WND_CLASS_NAME;
     wc.lpfnWndProc = WinFunc;
     wc.cbWndExtra = sizeof(win *);
 
     if (!RegisterClass(&wc))
-      MessageBox(NULL, "Don't create window's class", "ERROR", MB_OK);
+      MessageBox(nullptr, "Don't create window's class", "ERROR", MB_OK);
 
     hWnd = 
       CreateWindow(WND_CLASS_NAME,
